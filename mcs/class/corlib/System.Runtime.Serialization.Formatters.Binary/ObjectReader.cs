@@ -684,7 +684,7 @@ namespace System.Runtime.Serialization.Formatters.Binary
 							memberName = names[n].Substring (i+1);
 							Type t = metadata.Type.BaseType;
 							while (t != null) {
-								if (t.Name == baseTypeName) {
+								if (t.Name == baseTypeName || t.FullName == baseTypeName) {
 									field = t.GetField (memberName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
 									break;
 								}

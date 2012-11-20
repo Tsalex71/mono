@@ -90,6 +90,7 @@ namespace System.Runtime.Serialization
 
 			//FIXME: context?
 			ArrayList fields = new ArrayList ();
+			Hashtable shortTypeNames = new Hashtable();
 			Type t = type;
 			while (t != null) {
 				if (!t.IsSerializable) {
@@ -100,7 +101,7 @@ namespace System.Runtime.Serialization
 					throw new SerializationException (msg);
 				}
 
-				GetFields (type, t, fields);
+				GetFields (type, t, fields, shortTypeNames);
 				t = t.BaseType;
 			}
 
@@ -109,14 +110,23 @@ namespace System.Runtime.Serialization
 			return result;
 		}
 
-		private static void GetFields (Type reflectedType, Type type, ArrayList fields)
+		private static void GetFields (Type reflectedType, Type type, ArrayList fields, Hashtable shortTypeNames)
 		{
+			bool useShortTypeName = true;
+			if (reflectedType != type) {
+				if(shortTypeNames.ContainsKey(type.Name)) {
+					useShortTypeName = false;
+				}
+				else {
+					shortTypeNames.Add(type.Name, type.Name);
+				}
+			}
 			FieldInfo [] fs = type.GetFields (fieldFlags);
 			foreach (FieldInfo field in fs)
 				if (!(field.IsNotSerialized)) {
 					MonoField mf = field as MonoField;
 					if (mf != null && reflectedType != type && !mf.IsPublic) {
-						string fname = type.Name + "+" + mf.Name;
+						string fname = (useShortTypeName ? type.Name : type.FullName) + "+" + mf.Name;
 						fields.Add (mf.Clone (fname));
 					}
 					else
