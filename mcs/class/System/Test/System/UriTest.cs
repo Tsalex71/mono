@@ -1736,6 +1736,13 @@ namespace MonoTests.System
 		}
 
 		[Test]
+		public void GetComponents_File ()
+		{
+			Uri rel = new Uri (Environment.CurrentDirectory, UriKind.Absolute);
+			rel.GetComponents (UriComponents.AbsoluteUri, UriFormat.SafeUnescaped);
+		}
+
+		[Test]
 		public void GetComponents_AbsoluteUri ()
 		{
 			Uri uri = new Uri ("http://mono-project.com/list?id=1%262&sort=asc#fragment%263");
