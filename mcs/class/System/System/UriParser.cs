@@ -58,7 +58,7 @@ namespace System {
 			if ((scheme == null) || (scheme == "*")) {
 				scheme = elements.scheme;
 				dp = Uri.GetDefaultPort (scheme);
-			} else if (!string.IsNullOrEmpty(elements.scheme) && String.Compare (scheme, elements.scheme, true) != 0) {
+			} else if (!string.IsNullOrEmpty (elements.scheme) && String.Compare (scheme, elements.scheme, true) != 0) {
 				throw new SystemException ("URI Parser: scheme mismatch: " + scheme + " vs. " + elements.scheme);
 			}
 
