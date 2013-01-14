@@ -39,6 +39,10 @@ namespace System.Collections.ObjectModel
 	[TypeForwardedFrom (Consts.WindowsBase_3_0)]
 #endif
 	public class ObservableCollection<T> : Collection<T>, INotifyCollectionChanged, INotifyPropertyChanged {
+	
+		[Serializable] // for serialization compatibility with other implementations
+		private class SimpleMonitor {
+		}
 		
 		private class Reentrant : IDisposable {
 			private int count = 0;

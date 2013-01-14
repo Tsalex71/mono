@@ -126,6 +126,7 @@ static const AssemblyVersionMap framework_assemblies [] = {
 	{"System.Web.Services", 0},
 	{"System.Windows.Forms", 0},
 	{"System.Xml", 0},
+	{"WindowsBase", 0},
 	{"mscorlib", 0}
 };
 #endif
