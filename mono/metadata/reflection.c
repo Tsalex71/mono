@@ -8391,6 +8391,9 @@ mono_custom_attrs_from_class (MonoClass *klass)
 {
 	MonoDomain* domain = mono_domain_get();
 
+	if (klass->generic_class)
+		klass = klass->generic_class->container_class;
+
 	// Hashing attributes as a lookup optimization.
 	MonoCustomAttrInfo* hashed_attribute_info = (MonoCustomAttrInfo*)g_hash_table_lookup(domain->class_custom_attributes, klass);
 	guint32 idx;
@@ -8399,9 +8402,6 @@ mono_custom_attrs_from_class (MonoClass *klass)
 	{
 		return hashed_attribute_info;
 	}
-
-	if (klass->generic_class)
-		klass = klass->generic_class->container_class;
 
 	if (klass->image->dynamic)
 		return lookup_custom_attr (klass->image, klass);
