@@ -8394,14 +8394,16 @@ mono_custom_attrs_from_class (MonoClass *klass)
 	if (klass->generic_class)
 		klass = klass->generic_class->container_class;
 
+#if 0 // Disabling this due to race condition: https://github.com/Unity-Technologies/mono/pull/853
 	// Hashing attributes as a lookup optimization.
 	MonoCustomAttrInfo* hashed_attribute_info = (MonoCustomAttrInfo*)g_hash_table_lookup(domain->class_custom_attributes, klass);
-	guint32 idx;
 
 	if(hashed_attribute_info != NULL) 
 	{
 		return hashed_attribute_info;
 	}
+#endif
+	guint32 idx;
 
 	if (klass->image->dynamic)
 		return lookup_custom_attr (klass->image, klass);
@@ -8416,6 +8418,10 @@ mono_custom_attrs_from_class (MonoClass *klass)
 		idx |= MONO_CUSTOM_ATTR_TYPEDEF;
 	}
 
+
+#if 1
+	return mono_custom_attrs_from_index (klass->image, idx);
+#else
 	hashed_attribute_info = mono_custom_attrs_from_index (klass->image, idx);
 
 	g_hash_table_insert(domain->class_custom_attributes, klass, hashed_attribute_info);
@@ -8423,6 +8429,7 @@ mono_custom_attrs_from_class (MonoClass *klass)
 	if (hashed_attribute_info != NULL)
 		hashed_attribute_info->cached = 1;
 	return hashed_attribute_info;
+#endif
 }
 
 MonoCustomAttrInfo*
